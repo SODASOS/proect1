@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<title>EduQuiz</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+<h1>EduQuiz — Образовательная викторина</h1>
+<nav>
+{% if current_user.is_authenticated %}
+<a href="{{ url_for('dashboard') }}">Личный кабинет</a> |
+<a href="{{ url_for('quiz') }}">Пройти викторину</a> |
+<a href="{{ url_for('results') }}">Результаты</a> |
+{% if current_user.role == 'teacher' %}
+<a href="{{ url_for('admin') }}">Управление вопросами</a> |
+{% endif %}
+<a href="{{ url_for('logout') }}">Выйти</a>
+{% else %}
+<a href="{{ url_for('index') }}">Главная</a> |
+<a href="{{ url_for('login') }}">Войти</a> |
+<a href="{{ url_for('register') }}">Регистрация</a>
+{% endif %}
+</nav>
+</header>
+<main>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="flashes">
+{% for msg in messages %}
+<li>{{ msg }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>
+index.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>Добро пожаловать в EduQuiz!</h2>
+<p>Используйте меню для навигации.</p>
+{% endblock %}
+      register.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>Регистрация</h2>
+<form method="POST">
+{{ form.hidden_tag() }}
+<p>{{ form.username.label }}<br>{{ form.username(size=32) }}</p>
+<p>{{ form.password.label }}<br>{{ form.password(size=32) }}</p>
+<p>{{ form.confirm_password.label }}<br>{{ form.confirm_password(size=32) }}</p>
+<p>{{ form.submit() }}</p>
+</form>
+{% endblock %}
+      login.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>Вход</h2>
+<form method="POST">
+{{ form.hidden_tag() }}
+<p>{{ form.username.label }}<br>{{ form.username(size=32) }}</p>
+<p>{{ form.password.label }}<br>{{ form.password(size=32) }}</p>
+<p>{{ form.submit() }}</p>
+</form>
+{% endblock %}
+      dashboard.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>Личный кабинет</h2>
+<p>Добро пожаловать, {{ current_user.username }}!</p>
+{% endblock %}
+      admin.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>Управление вопросами</h2>
+<form method="POST">
+<label>Вопрос:</label><br>
+<input type="text" name="question" required><br><br>
+<label>Опции:</label><br>
+<input type="text" name="option1" placeholder="Опция 1" required>
+<input type="radio" name="correct_option" value="1" required> Правильная<br>
+<input type="text" name="option2" placeholder="Опция 2" required>
+<input type="radio" name="correct_option" value="2"> Правильная<br>
+<input type="text" name="option3" placeholder="Опция 3" required>
+<input type="radio" name="correct_option" value="3"> Правильная<br>
+<input type="text" name="option4" placeholder="Опция 4" required>
+<input type="radio" name="correct_option" value="4"> Правильная<br><br>
+<button type="submit">Добавить вопрос</button>
+</form>
+{% endblock %}
+      quiz.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>Прохождение викторины</h2>
+<div id="quiz-container">
+<button onclick="loadQuestions()">Загрузить вопросы</button>
+</div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}
+      results.html
+
+          
+            
+            
+          
+          {% extends 'base.html' %}
+{% block content %}
+<h2>История результатов</h2>
+<ul>
+{% for res in results %}
+<li>{{ res.timestamp.strftime('%Y-%m-%d %H:%M') }}: {{ res.score }}/{{ res.total_questions }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
