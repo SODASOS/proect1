@@ -1,0 +1,15 @@
+EduQuiz/
+├── app.py                    # Основной скрипт запуска
+├── models.py                 # Модели базы данных
+├── static/
+│   ├── style.css             # стили
+│   └── script.js             # скрипты
+└── templates/
+    ├── base.html             # базовая разметка
+    ├── index.html            # главная страница
+    ├── register.html         # регистрация
+    ├── login.html            # вход
+    ├── dashboard.html        # личный кабинет
+    ├── admin.html            # управление вопросами
+    ├── quiz.html             # викторина
+    └── results.html          # история результатов
